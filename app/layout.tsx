@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Varela_Round } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import "./globals.css";
 import WelcomePrompt from "./WelcomePrompt";
+import { Preloader } from "./preloader";
 
 const varela = Varela_Round({
   variable: "--font-varela",
@@ -31,6 +32,7 @@ export default function RootLayout({
       className={`${varela.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="bg-background min-h-dvh font-sans text-foreground antialiased">
+        <Preloader />
         {children}
         <WelcomePrompt />
       </body>

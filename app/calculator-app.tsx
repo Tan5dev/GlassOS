@@ -215,7 +215,7 @@ export default function CalculatorApp() {
       { l: "0", cls: "wide", fn: () => input("0") },
       { l: ".", fn: () => input(".") },
       { l: "⌫", fn: backspace },
-      { l: "=", cls: "equals-btn", fn: calculate },
+      { l: "=", cls: "equals-btn w-full col-span-4", fn: calculate },
     ],
   ];
 
@@ -256,6 +256,9 @@ export default function CalculatorApp() {
       { l: "AC", cls: "sci accent", fn: clear },
       { l: "⌫", cls: "sci", fn: backspace },
     ],
+    [
+      { l: "=", cls: "equals-btn w-full col-span-4", fn: calculate },
+    ]
   ];
 
   useEffect(() => {
@@ -264,11 +267,11 @@ export default function CalculatorApp() {
   }, [gridMode]);
 
   return (
-    <div className="calculator-container h-full flex flex-col p-4 text-white overflow-y-auto no-scrollbar">
+    <div className="flex flex-col p-4 h-full overflow-y-auto text-white calculator-container no-scrollbar">
       <div className="flex flex-wrap justify-between items-center gap-2 mb-3 shrink-0">
-        <div className="flex items-center gap-1.5 bg-white/[0.04] border border-white/[0.08] px-2.5 py-1 rounded-lg text-xs">
-          <span className="text-neutral-400 font-medium">Memory</span>
-          <span className="font-mono text-neutral-200 bg-white/[0.06] px-1.5 py-0.5 rounded">
+        <div className="flex items-center gap-1.5 bg-white/4 px-2.5 py-1 border border-white/8 rounded-lg text-xs">
+          <span className="font-medium text-neutral-400">Memory</span>
+          <span className="bg-white/6 px-1.5 py-0.5 rounded font-mono text-neutral-200">
             {formatResult(memory)}
           </span>
         </div>
@@ -288,8 +291,8 @@ export default function CalculatorApp() {
         </div>
       </div>
 
-      <div className={`display-panel flex flex-col justify-end items-end p-4 mb-3 min-h-[90px] bg-zinc-950/60 border border-white/[0.08] rounded-xl relative overflow-hidden select-all shrink-0 ${isError ? "border-red-500/40" : ""}`}>
-        <div className="w-full min-h-[18px] text-neutral-400 text-xs text-right break-all select-none tracking-wide">
+      <div className={`display-panel flex flex-col justify-end items-end p-4 mb-3 min-h-22.5 bg-zinc-950/60 border border-white/8 rounded-xl relative overflow-hidden select-all shrink-0 ${isError ? "border-red-500/40" : ""}`}>
+        <div className="w-full min-h-4.5 text-neutral-400 text-xs text-right break-all tracking-wide select-none">
           {history}
         </div>
         <div className="mt-1 w-full font-sans font-normal text-white text-3xl sm:text-4xl text-right break-all tracking-tight">
@@ -301,7 +304,7 @@ export default function CalculatorApp() {
         {gridMode === "both" ? (
           <div className="flex flex-row items-stretch gap-3 w-full h-full">
             <div className="flex-1 items-center gap-1.5 grid grid-cols-4">
-              {sciRows.flat().map((b, i) => (
+              {sciRows.flat().slice(0, -1).map((b, i) => (
                 <CalcButton
                   key={`sci-${i}`}
                   label={b.l}

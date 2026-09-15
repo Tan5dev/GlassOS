@@ -66,7 +66,7 @@ export function HackaTimeWidget() {
 
     if (isLoading) {
         return (
-            <div className="group flex flex-col justify-between bg-zinc-950/60 backdrop-blur-xl p-3.5 border border-white/[0.08] rounded-xl w-60 h-32 select-none">
+            <div className="group flex flex-col justify-between bg-zinc-950/60 backdrop-blur-xl p-3.5 border border-white/8 rounded-xl w-60 h-32 select-none">
                 <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center gap-2 min-w-0 flex-1">
                         <div className="bg-white/10 rounded-full size-6 shrink-0 animate-pulse" />
@@ -106,7 +106,7 @@ export function HackaTimeWidget() {
         const days = ["S", "M", "T", "W", "T", "F", "S"]
 
         return (
-            <div className="group flex flex-col justify-between bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-3.5 border border-white/[0.08] hover:border-white/15 rounded-xl w-60 h-32 transition-all duration-180 cursor-default select-none">
+            <div className="group flex flex-col justify-between bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-3.5 border border-white/8 hover:border-white/15 rounded-xl w-60 h-32 transition-all duration-180 cursor-default select-none">
                 <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center gap-2 min-w-0">
                         {user.avatar ? (
@@ -179,7 +179,7 @@ export function HackaTimeWidget() {
     return (
         <div
             onClick={login}
-            className="group flex flex-col justify-between bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-3.5 border border-white/[0.08] hover:border-white/15 rounded-xl w-60 h-32 transition-all duration-180 cursor-pointer select-none"
+            className="group flex flex-col justify-between bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-3.5 border border-white/8 hover:border-white/15 rounded-xl w-60 h-32 transition-all duration-180 cursor-pointer select-none"
         >
             <div className="flex justify-between items-center">
                 <h3 className="font-medium text-white text-xs">HackaTime</h3>

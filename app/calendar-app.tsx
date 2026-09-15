@@ -215,8 +215,8 @@ export default function CalendarApp() {
 
   return (
     <div className="h-full flex flex-col md:flex-row gap-4 p-4 text-white overflow-y-auto no-scrollbar">
-      <div className="flex flex-col flex-1 bg-zinc-950/60 backdrop-blur-xl border border-white/[0.08] rounded-xl p-4 min-w-0">
-        <div className="flex justify-between items-center mb-4 pb-3 border-b border-white/[0.08]">
+      <div className="flex flex-col flex-1 bg-zinc-950/60 backdrop-blur-xl border border-white/8 rounded-xl p-4 min-w-0">
+        <div className="flex justify-between items-center mb-4 pb-3 border-b border-white/8">
           <div className="flex items-baseline gap-2">
             <h2 className="text-xl font-medium tracking-tight text-white">
               {MONTHS[currentMonth]}
@@ -227,11 +227,11 @@ export default function CalendarApp() {
           <div className="flex items-center gap-1.5">
             <button
               onClick={handleToday}
-              className="px-2.5 py-1 text-xs font-medium bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 rounded-md transition-all active:scale-95 text-neutral-300"
+              className="px-2.5 py-1 text-xs font-medium bg-white/4 hover:bg-white/8 border border-white/10 rounded-md transition-all active:scale-95 text-neutral-300"
             >
               Today
             </button>
-            <div className="flex items-center bg-white/[0.04] border border-white/10 rounded-md p-0.5">
+            <div className="flex items-center bg-white/4 border border-white/10 rounded-md p-0.5">
               <button
                 onClick={handlePrevMonth}
                 className="p-1 hover:bg-white/10 rounded text-neutral-400 hover:text-white transition-all"
@@ -248,7 +248,7 @@ export default function CalendarApp() {
           </div>
         </div>
 
-        <div className="grid grid-cols-7 mb-2 py-1 border-b border-white/[0.06] text-xs font-medium text-neutral-400 text-center uppercase tracking-wider">
+        <div className="grid grid-cols-7 mb-2 py-1 border-b border-white/6 text-xs font-medium text-neutral-400 text-center uppercase tracking-wider">
           {WEEKDAYS.map((day) => (
             <div key={day} className="py-1">
               {day}
@@ -256,7 +256,7 @@ export default function CalendarApp() {
           ))}
         </div>
 
-        <div className="flex-1 items-stretch gap-1.5 grid grid-cols-7 min-h-[260px]">
+        <div className="flex-1 items-stretch gap-1.5 grid grid-cols-7 min-h-65">
           {dayCells.map(({ date, isCurrentMonth }, idx) => {
             const dateStr = formatDateString(date);
             const isSelected = dateStr === selectedDateStr;
@@ -272,19 +272,19 @@ export default function CalendarApp() {
                     setCurrentDate(new Date(date.getFullYear(), date.getMonth(), 1));
                   }
                 }}
-                className={`calendar-cell flex flex-col items-center justify-between p-1.5 rounded-lg border transition-all text-left relative group min-h-[46px] select-none cursor-pointer ${isCurrentMonth ? "text-neutral-200" : "text-neutral-600"
+                className={`calendar-cell flex flex-col items-center justify-between p-1.5 rounded-lg border transition-all text-left relative group min-h-11.5 select-none cursor-pointer ${isCurrentMonth ? "text-neutral-200" : "text-neutral-600"
                   } ${isSelected
-                    ? "bg-white/[0.12] border-white/25 shadow-md"
+                    ? "bg-white/12 border-white/25 shadow-md"
                     : isToday
                       ? "bg-sky-400/10 border-sky-400/30 text-sky-300"
-                      : "bg-white/[0.02] border-white/[0.05] hover:bg-white/[0.06] hover:border-white/10"
+                      : "bg-white/2 border-white/5 hover:bg-white/6 hover:border-white/10"
                   }`}
               >
                 <span className={`text-xs font-medium relative ${isToday ? "font-semibold text-sky-400" : ""}`}>
                   {date.getDate()}
                 </span>
 
-                <div className="flex flex-wrap justify-center gap-1 mt-1 w-full max-w-[36px]">
+                <div className="flex flex-wrap justify-center gap-1 mt-1 w-full max-w-9">
                   {dayEvents.slice(0, 3).map((e) => (
                     <span
                       key={e.id}
@@ -301,10 +301,10 @@ export default function CalendarApp() {
         </div>
       </div>
 
-      <div className="flex flex-col bg-zinc-950/60 backdrop-blur-xl p-4 border border-white/[0.08] rounded-xl w-full md:w-80 overflow-hidden shrink-0">
+      <div className="flex flex-col bg-zinc-950/60 backdrop-blur-xl p-4 border border-white/8 rounded-xl w-full md:w-80 overflow-hidden shrink-0">
         {isAddingEvent ? (
           <form onSubmit={handleSaveEvent} className="flex flex-col flex-1 overflow-y-auto no-scrollbar">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/[0.08]">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/8">
               <h3 className="font-medium text-white text-base">
                 {editingEventId ? "Edit Event" : "New Event"}
               </h3>
@@ -330,7 +330,7 @@ export default function CalendarApp() {
                   placeholder="Event title"
                   value={eventTitle}
                   onChange={(e) => setEventTitle(e.target.value)}
-                  className="bg-white/[0.04] px-3 py-2 border border-white/10 focus:border-white/20 rounded-lg focus:outline-none w-full text-white text-xs placeholder-neutral-500"
+                  className="bg-white/4 px-3 py-2 border border-white/10 rounded-lg focus:outline-none w-full text-white text-xs"
                 />
               </div>
 
@@ -342,7 +342,7 @@ export default function CalendarApp() {
                     required
                     value={eventStartTime}
                     onChange={(e) => setEventStartTime(e.target.value)}
-                    className="bg-white/[0.04] px-2.5 py-2 border border-white/10 focus:border-white/20 rounded-lg focus:outline-none w-full text-white text-xs"
+                    className="bg-white/4 px-2.5 py-2 border border-white/10 rounded-lg focus:outline-none w-full text-white text-xs"
                   />
                 </div>
                 <div className="flex-1">
@@ -352,7 +352,7 @@ export default function CalendarApp() {
                     required
                     value={eventEndTime}
                     onChange={(e) => setEventEndTime(e.target.value)}
-                    className="bg-white/[0.04] px-2.5 py-2 border border-white/10 focus:border-white/20 rounded-lg focus:outline-none w-full text-white text-xs"
+                    className="bg-white/4 px-2.5 py-2 border border-white/10 rounded-lg focus:outline-none w-full text-white text-xs"
                   />
                 </div>
               </div>
@@ -367,7 +367,7 @@ export default function CalendarApp() {
                       onClick={() => setEventCategory(cat)}
                       className={`flex items-center gap-1.5 px-2.5 py-1.5 text-xs font-medium rounded-lg border text-left cursor-pointer transition-all ${eventCategory === cat
                         ? "bg-white/10 border-white/20 text-white"
-                        : "bg-white/[0.02] border-transparent text-neutral-400 hover:bg-white/[0.06] hover:text-neutral-200"
+                        : "bg-white/2 border-transparent text-neutral-400 hover:bg-white/6 hover:text-neutral-200"
                         }`}
                     >
                       <span className={`w-2 h-2 rounded-full ${CATEGORIES[cat].color}`} />
@@ -377,13 +377,13 @@ export default function CalendarApp() {
                 </div>
               </div>
 
-              <div className="flex flex-col flex-1 min-h-[80px]">
+              <div className="flex flex-col flex-1 min-h-20">
                 <label className="block mb-1 font-medium text-neutral-400 text-xs">Description</label>
                 <textarea
                   placeholder="Add notes..."
                   value={eventDescription}
                   onChange={(e) => setEventDescription(e.target.value)}
-                  className="flex-1 bg-white/[0.04] px-3 py-2 border border-white/10 focus:border-white/20 rounded-lg focus:outline-none w-full min-h-[70px] text-white text-xs resize-none placeholder-neutral-500"
+                  className="flex-1 bg-white/4 px-3 py-2 border border-white/10 rounded-lg focus:outline-none w-full min-h-17.5 text-white text-xs resize-none"
                 />
               </div>
             </div>
@@ -398,7 +398,7 @@ export default function CalendarApp() {
           </form>
         ) : (
           <div className="flex flex-col flex-1 overflow-hidden">
-            <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/[0.08]">
+            <div className="flex justify-between items-center mb-4 pb-2 border-b border-white/8">
               <div>
                 <h3 className="font-medium text-white text-base">Agenda</h3>
                 <p className="text-[11px] text-neutral-400">{selectedDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</p>
@@ -434,7 +434,7 @@ export default function CalendarApp() {
                 selectedDayEvents.map((ev) => (
                   <div
                     key={ev.id}
-                    className={`p-3 bg-white/[0.03] border rounded-lg flex flex-col gap-1.5 group hover:bg-white/[0.06] hover:border-white/15 transition-all ${CATEGORIES[ev.category]?.border || "border-white/[0.08]"
+                    className={`p-3 bg-white/3 border rounded-lg flex flex-col gap-1.5 group hover:bg-white/6 hover:border-white/15 transition-all ${CATEGORIES[ev.category]?.border || "border-white/8"
                       }`}
                   >
                     <div className="flex justify-between items-start gap-2">
@@ -466,7 +466,7 @@ export default function CalendarApp() {
                     </div>
 
                     {ev.description && (
-                      <p className="mt-0.5 pt-1.5 border-t border-white/[0.05] text-neutral-400 text-[11px] line-clamp-2">
+                      <p className="mt-0.5 pt-1.5 border-t border-white/5 text-neutral-400 text-[11px] line-clamp-2">
                         {ev.description}
                       </p>
                     )}

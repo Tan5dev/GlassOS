@@ -101,7 +101,9 @@
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.9);
     box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
-    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease;
+    transition:
+      transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 180ms ease;
     opacity: 0;
     pointer-events: none;
   }
@@ -163,7 +165,8 @@ button {
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
   height: 44px;
-  transition: background 180ms cubic-bezier(0.16, 1, 0.3, 1),
+  transition:
+    background 180ms cubic-bezier(0.16, 1, 0.3, 1),
     border-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
     transform 120ms ease;
   will-change: transform;
@@ -242,4 +245,90 @@ button {
 
 .calendar-cell:active {
   transform: scale(0.97);
+}
+
+@keyframes ambient1 {
+  0%,
+  100% {
+    transform: translate(-4%, -4%);
+  }
+  50% {
+    transform: translate(5%, 4%);
+  }
+}
+
+@keyframes ambient2 {
+  0%,
+  100% {
+    transform: translate(5%, 4%);
+  }
+  50% {
+    transform: translate(-6%, -5%);
+  }
+}
+
+@keyframes logoFloat {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.03);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 0 80px rgba(255, 255, 255, 0.18),
+      0 0 140px rgba(96, 165, 250, 0.15);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200%;
+  }
+  to {
+    background-position: 200%;
+  }
+}
+
+@keyframes loader {
+  from {
+    transform: translateX(-160%);
+  }
+  to {
+    transform: translateX(360%);
+  }
+}
+
+@keyframes fadeMessage {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes gridMove {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(40px);
+  }
 }

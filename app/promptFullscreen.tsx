@@ -50,12 +50,11 @@ export default function WelcomePrompt() {
 
                 <div className="relative flex flex-col p-8 h-full">
                     <h2 className="font-light text-white text-3xl tracking-tight">
-                        Welcome
+                        Fullscreen recommended
                     </h2>
 
                     <p className="mt-4 max-w-xl text-white/75">
-                        This website provides an immersive experience. You can continue
-                        normally or open this prompt in fullscreen.
+                        Open in fullscreen for the best desktop experience.
                     </p>
 
                     <div className="flex gap-3 mt-auto">
@@ -64,7 +63,7 @@ export default function WelcomePrompt() {
                                 onClick={() => setFullscreen(true)}
                                 className="bg-white/15 hover:bg-white/20 backdrop-blur-xl px-5 py-2 rounded-full text-white transition"
                             >
-                                Open Fullscreen
+                                Fullscreen
                             </button>
                         )}
 

@@ -456,7 +456,7 @@ export default function WeatherApp() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search for cities..."
-            className="bg-white/10 focus:bg-white/15 shadow-inner backdrop-blur-md py-2.5 pr-4 pl-11 border border-white/10 focus:border-white/20 rounded-full outline-none w-full text-white placeholder:text-white/40 text-sm transition-all"
+            className="bg-white/10 shadow-inner backdrop-blur-md py-2.5 pr-4 pl-11 border border-white/10 rounded-full outline-none w-full text-white text-sm transition-all"
           />
           {query && (
             <button
@@ -683,7 +683,7 @@ export default function WeatherApp() {
               <div className="mt-4">
                 <div className="relative bg-black/20 rounded-full w-full h-1.5 overflow-hidden">
                   <div
-                    className="absolute bg-linear-to-r from-emerald-500 via-orange-500 via-yellow-500 to-red-500 h-full"
+                    className="absolute bg-linear-to-r from-emerald-500 via-orange-500 to-red-500 h-full"
                     style={{ width: "100%" }}
                   />
                   <div
@@ -951,7 +951,7 @@ export function WeatherWidget({ onClick }: { onClick?: () => void }) {
     return (
       <div
         onClick={onClick}
-        className="flex flex-col justify-center items-center bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-4 border border-white/[0.08] rounded-xl w-60 h-32 transition-all cursor-pointer select-none"
+        className="flex flex-col justify-center items-center bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-4 border border-white/8 rounded-xl w-60 h-32 transition-all cursor-pointer select-none"
       >
         <div className="border-2 border-white/20 border-t-white/80 rounded-full w-5 h-5 animate-spin"></div>
       </div>
@@ -966,7 +966,7 @@ export function WeatherWidget({ onClick }: { onClick?: () => void }) {
   return (
     <div
       onClick={onClick}
-      className="group flex flex-col justify-between bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-4 border border-white/[0.08] hover:border-white/15 rounded-xl w-60 h-32 transition-all duration-180 cursor-pointer select-none"
+      className="group flex flex-col justify-between bg-zinc-950/60 hover:bg-zinc-900/60 backdrop-blur-xl p-4 border border-white/8 hover:border-white/15 rounded-xl w-60 h-32 transition-all duration-180 cursor-pointer select-none"
     >
       <div className="flex justify-between items-start">
         <div className="min-w-0">

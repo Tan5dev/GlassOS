@@ -4,12 +4,12 @@ import { useState, useEffect, FormEvent, DragEvent, useRef } from "react";
 import Image from "next/image";
 import StatusIcons from "./status-icons";
 import DateTime from "./date-time";
-import { FaCalculator, FaCalendar, FaCamera, FaChrome, FaDownload, FaFolder, FaUserAstronaut } from "react-icons/fa6";
+import { FaCalculator, FaCalendar, FaCamera, FaChrome } from "react-icons/fa6";
 import CalculatorApp from "./calculator-app";
 import CalendarApp from "./calendar-app";
 import { VscVscode } from "react-icons/vsc";
 import { LuListTodo } from "react-icons/lu";
-import { BiCamera, BiSolidNotepad } from "react-icons/bi";
+import { BiSolidNotepad } from "react-icons/bi";
 import { IoSettings } from "react-icons/io5";
 import { RiGamepadFill } from "react-icons/ri";
 import { BsCloudSunFill } from "react-icons/bs";
@@ -26,189 +26,21 @@ import {
   horizontalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import { Icon } from "@iconify/react";
 import MainClock from "./main-clock";
-import { FaRedo } from "react-icons/fa";
-import { Games } from "./gamesApp"
+import { Games } from "./gamesApp";
 import { HackaTimeWidget } from "./hackatime-widget";
-type Tab = {
-  id: string;
-  title: string;
-  url: string;
-  history: string[];
-  historyIndex: number;
-  refreshKey: number;
-};
-
-type WindowProps = {
-  label: string;
-  icon: any;
-  isOpen: boolean;
-  isMinimized: boolean;
-  isMaximized: boolean;
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-  zIndex: number;
-  onClose: () => void;
-  onMinimize: () => void;
-  onMaximize: () => void;
-  onDragStart: (e: React.MouseEvent) => void;
-  onResizeStart: (e: React.MouseEvent) => void;
-  onFocus: () => void;
-  isDragging: boolean;
-  isResizing: boolean;
-  children: React.ReactNode;
-  headerContent?: React.ReactNode;
-};
+import { Tab, WindowsState, AppItem, DeviceInfo } from "./types";
+import AppIcon from "./components/AppIcon";
+import Window from "./components/Window";
+import LoginScreen from "./components/LoginScreen";
+import ChromeApp, { ChromeHeader } from "./components/apps/ChromeApp";
+import SettingsApp from "./components/apps/SettingsApp";
+import CameraApp from "./components/apps/CameraApp";
+import VSCodeApp from "./components/apps/VSCodeApp";
+import NotepadApp from "./components/apps/NotepadApp";
+import TodoApp from "./components/apps/TodoApp";
 
 const generateId = () => Math.random().toString(36).substring(2, 9);
-
-function AppIcon({ icon: IconComponent, label, onClick, open }: any) {
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: label,
-  });
-
-  return (
-    <button
-      ref={setNodeRef}
-      {...attributes}
-      {...listeners}
-      className={`group relative app ${open ? "open" : ""}`}
-      style={{
-        transform: CSS.Transform.toString(transform),
-        transition: isDragging ? "none" : transition,
-      }}
-      onClick={onClick}
-    >
-      <IconComponent />
-
-      <span className="top-full left-1/2 z-[9999] absolute bg-zinc-950/90 opacity-0 group-hover:opacity-100 backdrop-blur-md mt-2.5 px-2.5 py-1 border border-white/10 rounded-md font-medium text-neutral-200 text-xs whitespace-nowrap transition-all -translate-x-1/2 translate-y-1 group-hover:translate-y-0 duration-150 pointer-events-none shadow-lg">
-        {label}
-      </span>
-    </button>
-  );
-}
-
-function Window({
-  label,
-  icon: IconComponent,
-  isOpen,
-  isMinimized,
-  isMaximized,
-  x,
-  y,
-  w,
-  h,
-  zIndex,
-  onClose,
-  onMinimize,
-  onMaximize,
-  onDragStart,
-  onResizeStart,
-  onFocus,
-  isDragging,
-  isResizing,
-  children,
-  headerContent,
-}: WindowProps) {
-  if (!isOpen) return null;
-
-  return (
-    <div
-      onMouseDown={onFocus}
-      className={`absolute flex flex-col bg-zinc-950/75 backdrop-blur-2xl border border-white/[0.08] rounded-xl overflow-hidden shadow-2xl ${isDragging || isResizing
-        ? "transition-none"
-        : "transition-all duration-200 ease-out"
-        } ${isMinimized ? "opacity-0 scale-95 pointer-events-none translate-y-8" : "opacity-100 scale-100"}`}
-      style={
-        isMaximized
-          ? {
-            top: "2.75rem",
-            left: 0,
-            width: "100vw",
-            height: "calc(100vh - 2.75rem)",
-            borderRadius: 0,
-            zIndex,
-          }
-          : {
-            top: y,
-            left: x,
-            width: w,
-            height: h,
-            zIndex,
-          }
-      }
-    >
-      <div
-        onMouseDown={onDragStart}
-        className="flex justify-between items-center gap-2 bg-white/[0.03] px-3.5 py-2.5 border-b border-white/[0.06] cursor-default select-none shrink-0"
-      >
-        <div className="flex flex-1 items-center gap-2 min-w-0">
-          <div className="flex items-center gap-1.5 pr-2 border-r border-white/10 nodrag shrink-0">
-            <button
-              onClick={onClose}
-              className="group flex justify-center items-center bg-rose-500/80 hover:bg-rose-500 rounded-full w-3 h-3 transition-colors cursor-pointer"
-              title="Close"
-            >
-              <Icon icon="mdi:close" className="opacity-0 group-hover:opacity-100 text-black/80" width={9} />
-            </button>
-            <button
-              onClick={onMinimize}
-              className="group flex justify-center items-center bg-amber-500/80 hover:bg-amber-500 rounded-full w-3 h-3 transition-colors cursor-pointer"
-              title="Minimize"
-            >
-              <Icon icon="mdi:minus" className="opacity-0 group-hover:opacity-100 text-black/80" width={9} />
-            </button>
-            <button
-              onClick={onMaximize}
-              className="group flex justify-center items-center bg-emerald-500/80 hover:bg-emerald-500 rounded-full w-3 h-3 transition-colors cursor-pointer"
-              title={isMaximized ? "Restore" : "Maximize"}
-            >
-              <Icon icon={isMaximized ? "mdi:window-restore" : "mdi:plus"} className="opacity-0 group-hover:opacity-100 text-black/80" width={9} />
-            </button>
-          </div>
-
-          {headerContent ? (
-            headerContent
-          ) : (
-            <div className="flex items-center gap-2 min-w-0">
-              <IconComponent className="size-3.5 text-neutral-400 shrink-0" />
-              <span className="font-medium text-neutral-300 text-xs truncate">
-                {label}
-              </span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      <div className="relative flex flex-col flex-1 overflow-hidden">
-        {children}
-      </div>
-
-      {!isMaximized && (
-        <div
-          onMouseDown={onResizeStart}
-          className="right-0 bottom-0 z-50 absolute w-3.5 h-3.5 cursor-se-resize"
-          style={{
-            background:
-              "linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.15) 50%)",
-          }}
-        />
-      )}
-    </div>
-  );
-}
 
 export default function Home() {
   const [online, setOnline] = useState(false);
@@ -229,38 +61,30 @@ export default function Home() {
   const [vscodeActiveFile, setVscodeActiveFile] = useState("page.tsx");
 
   const [notepadText, setNotepadText] = useState(
-    "Welcome to Notepad on GlassOS!\nFeel free to write anything here.",
+    "Notes\n\nType here.",
   );
 
   const [todoInput, setTodoInput] = useState("");
   const [todos, setTodos] = useState([
     {
       id: "1",
-      text: "Design clean and transparent OS layout",
+      text: "Design clean layout",
       completed: true,
     },
     {
       id: "2",
-      text: "Implement multiple draggable application windows",
+      text: "Configure workspace apps",
       completed: true,
     },
     {
       id: "3",
-      text: "Create custom application boilerplates",
+      text: "Review project settings",
       completed: false,
     },
-    { id: "4", text: "Fix window z-index layering issues", completed: false },
   ]);
 
-  const [gameBoard, setGameBoard] = useState<(string | null)[]>(
-    Array(9).fill(null),
-  );
-  const [gameWinner, setGameWinner] = useState<string | null>(null);
   const [gameScores, setGameScores] = useState({ player: 0, ai: 0, ties: 0 });
-
-  const [deviceInfo, setDeviceInfo] = useState<Record<string, string | number>>(
-    {},
-  );
+  const [deviceInfo, setDeviceInfo] = useState<DeviceInfo>({});
 
   useEffect(() => {
     const handleCalcMode = (e: Event) => {
@@ -273,7 +97,7 @@ export default function Home() {
         let targetHeight = 580;
         if (mode === "both") {
           targetWidth = 720;
-          targetHeight = 440;
+          targetHeight = 550;
         } else if (mode === "scientific") {
           targetWidth = 380;
           targetHeight = 580;
@@ -292,25 +116,11 @@ export default function Home() {
     return () => window.removeEventListener("calculatorModeChange", handleCalcMode);
   }, []);
 
-  const [windows, setWindows] = useState<
-    Record<
-      string,
-      {
-        isOpen: boolean;
-        isMinimized: boolean;
-        isMaximized: boolean;
-        x: number;
-        y: number;
-        w: number;
-        h: number;
-        zIndex: number;
-      }
-    >
-  >({
+  const [windows, setWindows] = useState<WindowsState>({
     Settings: {
       isOpen: false,
       isMinimized: false,
-      isMaximized: false,
+      isMaximized: true,
       x: 120,
       y: 70,
       w: 650,
@@ -364,7 +174,7 @@ export default function Home() {
       x: 240,
       y: 90,
       w: 800,
-      h: 560,
+      h: 600,
       zIndex: 1,
     },
     "To-Do": {
@@ -441,9 +251,7 @@ export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const [stream, setStream] = useState<MediaStream | null>(null);
   const [photo, setPhoto] = useState<string | null>(null);
-
   const [devices, setDevices] = useState<MediaDeviceInfo[]>([]);
   const [cameraId, setCameraId] = useState("");
 
@@ -452,7 +260,7 @@ export default function Home() {
       await navigator.mediaDevices.getUserMedia({ video: true });
 
       const all = await navigator.mediaDevices.enumerateDevices();
-      const cams = all.filter(d => d.kind === "videoinput");
+      const cams = all.filter((d) => d.kind === "videoinput");
 
       setDevices(cams);
 
@@ -467,18 +275,6 @@ export default function Home() {
   useEffect(() => {
     if (cameraId) startCamera(cameraId);
   }, [cameraId]);
-
-  async function init() {
-    await startCamera();
-
-    const allDevices = await navigator.mediaDevices.enumerateDevices();
-
-    const cams = allDevices.filter((d) => d.kind === "videoinput");
-
-    setDevices(cams);
-
-    if (cams.length) setCameraId(cams[0].deviceId);
-  }
 
   async function startCamera(deviceId?: string) {
     stopCamera();
@@ -499,7 +295,7 @@ export default function Home() {
   }
 
   function stopCamera() {
-    streamRef.current?.getTracks().forEach(track => track.stop());
+    streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
   }
 
@@ -694,8 +490,8 @@ export default function Home() {
     const newTab: Tab = {
       id: generateId(),
       title: "New Tab",
-      url: "https://example.com",
-      history: ["https://example.com"],
+      url: "https://glasstab.thenicedev.xyz",
+      history: ["https://glasstab.thenicedev.xyz"],
       historyIndex: 0,
       refreshKey: 0,
     };
@@ -901,7 +697,7 @@ export default function Home() {
     setDeviceInfo(info);
   }, [battery, charging, online]);
 
-  const initialApps = [
+  const initialApps: AppItem[] = [
     { icon: FaCalculator, label: "Calculator" },
     { icon: FaCalendar, label: "Calendar" },
     { icon: FaCamera, label: "Camera" },
@@ -1060,685 +856,85 @@ export default function Home() {
     }
   }, [currentScreen]);
 
-  const renderChrome = () => {
-    return (
-      <div className="flex flex-col flex-1 bg-[#2b2c2f]">
-        <div className="flex items-center gap-2 bg-[#2b2c2f] px-3 border-zinc-700 border-b h-12">
-          <button
-            onClick={handleBack}
-            disabled={activeTab.historyIndex === 0}
-            className="hover:bg-white/10 disabled:opacity-30 p-2 rounded-full text-gray-300"
-          >
-            <Icon icon="mdi:arrow-left" width={18} />
-          </button>
-          <button
-            onClick={handleForward}
-            disabled={activeTab.historyIndex === activeTab.history.length - 1}
-            className="hover:bg-white/10 disabled:opacity-30 p-2 rounded-full text-gray-300"
-          >
-            <Icon icon="mdi:arrow-right" width={18} />
-          </button>
-          <button
-            onClick={handleRefresh}
-            className="hover:bg-white/10 p-2 rounded-full text-gray-300"
-          >
-            <Icon icon="mdi:refresh" width={18} />
-          </button>
-
-          <form onSubmit={handleNavigate} className="flex flex-1 mx-2">
-            <div className="flex flex-1 items-center bg-[#1e1e20] focus-within:bg-[#1e1e20] px-4 py-1.5 border border-zinc-600 focus-within:border-blue-500 rounded-full transition-all">
-              <Icon
-                icon="mdi:lock-outline"
-                width={16}
-                className="mr-2 text-green-400 shrink-0"
-              />
-              <input
-                type="text"
-                value={addressBarInput}
-                onChange={(e) => setAddressBarInput(e.target.value)}
-                className="bg-transparent outline-none w-full text-gray-200 text-sm"
-                placeholder="Search Google or type a URL"
-              />
-              <Icon
-                icon="mdi:star-outline"
-                width={18}
-                className="ml-2 text-gray-400 hover:text-gray-200 cursor-pointer shrink-0"
-              />
-            </div>
-          </form>
-
-          <button className="hover:bg-white/10 p-2 rounded-full text-gray-300">
-            <Icon icon="mdi:dots-vertical" width={18} />
-          </button>
-        </div>
-
-        <div className="relative flex-1 bg-white">
-          {tabs.map((tab) => (
-            <div
-              key={tab.id}
-              className={`absolute inset-0 ${tab.id === activeTabId ? "z-10 block" : "z-0 hidden"}`}
-            >
-              <iframe
-                key={`${tab.id}-${tab.refreshKey}`}
-                src={tab.url}
-                className={`bg-white border-none w-full h-full ${draggedWindow || resizedWindow ? "pointer-events-none" : ""}`}
-                title={tab.title}
-                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const renderSettings = () => {
-    return (
-      <div className="flex flex-row flex-1 bg-zinc-950/20 text-white">
-        <div className="flex flex-col gap-2 bg-zinc-950/40 p-4 border-white/5 border-r w-48 overflow-y-auto text-left shrink-0">
-          <button
-            onClick={() => setSettingsTab("personalization")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all text-left cursor-pointer ${settingsTab === "personalization" ? "bg-white/10 font-semibold" : "opacity-75 hover:bg-white/5"}`}
-          >
-            <Icon icon="mdi:palette" width={16} />
-            <span>Personalization</span>
-          </button>
-          <button
-            onClick={() => setSettingsTab("system")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all text-left cursor-pointer ${settingsTab === "system" ? "bg-white/10 font-semibold" : "opacity-75 hover:bg-white/5"}`}
-          >
-            <Icon icon="mdi:cog" width={16} />
-            <span>System Info</span>
-          </button>
-          <button
-            onClick={() => setSettingsTab("about")}
-            className={`flex items-center gap-2 px-3 py-2 rounded-xl text-sm transition-all text-left cursor-pointer ${settingsTab === "about" ? "bg-white/10 font-semibold" : "opacity-75 hover:bg-white/5"}`}
-          >
-            <Icon icon="mdi:information" width={16} />
-            <span>About OS</span>
-          </button>
-        </div>
-
-        <div className="flex-1 p-6 overflow-y-auto">
-          {settingsTab === "personalization" && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="mb-1 font-semibold text-lg">
-                  Desktop Wallpaper
-                </h3>
-                <p className="mb-3 text-white/50 text-xs">
-                  Choose a background image for your workspace.
-                </p>
-                <div className="gap-4 grid grid-cols-2">
-                  <button
-                    onClick={() => setWallpaper("/wallpaper-1.jpg")}
-                    className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${wallpaper === "/wallpaper-1.jpg" ? "border-blue-500 scale-[1.02]" : "border-white/10 hover:border-white/30"}`}
-                  >
-                    <Image
-                      src="/wallpaper-1.jpg"
-                      alt="Wallpaper 1"
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setWallpaper("/wallpaper-2.jpg")}
-                    className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${wallpaper === "/wallpaper-2.jpg" ? "border-blue-500 scale-[1.02]" : "border-white/10 hover:border-white/30"}`}
-                  >
-                    <Image
-                      src="/wallpaper-2.jpg"
-                      alt="Wallpaper 2"
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setWallpaper("/wallpaper-3.jpg")}
-                    className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${wallpaper === "/wallpaper-3.jpg" ? "border-blue-500 scale-[1.02]" : "border-white/10 hover:border-white/30"}`}
-                  >
-                    <Image
-                      src="/wallpaper-3.jpg"
-                      alt="Wallpaper 3"
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setWallpaper("/wallpaper-4.jpg")}
-                    className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${wallpaper === "/wallpaper-4.jpg" ? "border-blue-500 scale-[1.02]" : "border-white/10 hover:border-white/30"}`}
-                  >
-                    <Image
-                      src="/wallpaper-4.jpg"
-                      alt="Wallpaper 4"
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setWallpaper("/wallpaper-5.jpg")}
-                    className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${wallpaper === "/wallpaper-5.jpg" ? "border-blue-500 scale-[1.02]" : "border-white/10 hover:border-white/30"}`}
-                  >
-                    <Image
-                      src="/wallpaper-5.jpg"
-                      alt="Wallpaper 5"
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                  <button
-                    onClick={() => setWallpaper("/wallpaper-6.jpg")}
-                    className={`relative aspect-video rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${wallpaper === "/wallpaper-6.jpg" ? "border-blue-500 scale-[1.02]" : "border-white/10 hover:border-white/30"}`}
-                  >
-                    <Image
-                      src="/wallpaper-6.jpg"
-                      alt="Wallpaper 6"
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {settingsTab === "system" && (
-            <div className="space-y-6">
-              <div>
-                <h3 className="mb-3 font-medium text-base text-white">Performance</h3>
-                <div className="gap-4 grid grid-cols-2">
-                  <div className="bg-white/5 p-4 border border-white/5 rounded-xl">
-                    <div className="flex justify-between mb-2 text-neutral-400 text-xs">
-                      <span>CPU</span>
-                      <span className="font-mono text-neutral-200">{cpuUsage}%</span>
-                    </div>
-                    <div className="bg-white/10 rounded-full w-full h-1.5 overflow-hidden">
-                      <div
-                        className="bg-white h-full transition-all duration-300"
-                        style={{ width: `${cpuUsage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                  <div className="bg-white/5 p-4 border border-white/5 rounded-xl">
-                    <div className="flex justify-between mb-2 text-neutral-400 text-xs">
-                      <span>Memory</span>
-                      <span className="font-mono text-neutral-200">{memUsage}%</span>
-                    </div>
-                    <div className="bg-white/10 rounded-full w-full h-1.5 overflow-hidden">
-                      <div
-                        className="bg-white h-full transition-all duration-300"
-                        style={{ width: `${memUsage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="mb-3 font-medium text-base text-white">
-                  Network
-                </h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center bg-white/5 p-3 border border-white/5 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <Icon
-                        icon="mdi:wifi"
-                        className="text-neutral-300"
-                        width={18}
-                      />
-                      <div>
-                        <div className="font-medium text-xs text-white">
-                          Wi-Fi
-                        </div>
-                        <div className="text-neutral-400 text-[11px]">
-                          {settingsWifi
-                            ? "Connected to GlassNet"
-                            : "Disconnected"}
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setSettingsWifi(!settingsWifi)}
-                      className={`w-10 h-5 rounded-full p-0.5 transition-colors duration-200 cursor-pointer ${settingsWifi ? "bg-white" : "bg-white/20"}`}
-                    >
-                      <div
-                        className={`bg-zinc-950 w-4 h-4 rounded-full shadow transform transition-transform duration-200 ${settingsWifi ? "translate-x-5" : ""}`}
-                      ></div>
-                    </button>
-                  </div>
-
-                  <div className="flex justify-between items-center bg-white/5 p-3 border border-white/5 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <Icon
-                        icon="mdi:bluetooth"
-                        className="text-neutral-300"
-                        width={18}
-                      />
-                      <div>
-                        <div className="font-medium text-xs text-white">Bluetooth</div>
-                        <div className="text-neutral-400 text-[11px]">
-                          {settingsBluetooth
-                            ? "Searching"
-                            : "Off"}
-                        </div>
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => setSettingsBluetooth(!settingsBluetooth)}
-                      className={`w-10 h-5 rounded-full p-0.5 transition-colors duration-200 cursor-pointer ${settingsBluetooth ? "bg-white" : "bg-white/20"}`}
-                    >
-                      <div
-                        className={`bg-zinc-950 w-4 h-4 rounded-full shadow transform transition-transform duration-200 ${settingsBluetooth ? "translate-x-5" : ""}`}
-                      ></div>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {settingsTab === "about" && (
-            <div className="space-y-6">
-              <div className="flex items-center gap-4 pb-4 border-white/5 border-b">
-                <div className="bg-white/10 p-3 rounded-xl">
-                  <FaUserAstronaut className="size-10 text-white" />
-                </div>
-                <div>
-                  <h3 className="font-medium text-lg text-white">GlassOS</h3>
-                  <p className="text-neutral-400 text-xs font-mono">
-                    v1.0.0
-                  </p>
-                </div>
-              </div>
-
-              <div>
-                <h4 className="mb-3 font-mono text-[10px] uppercase tracking-widest text-neutral-400 select-none">
-                  System Info
-                </h4>
-                <div className="gap-3 grid grid-cols-1 md:grid-cols-2 text-neutral-300 text-xs">
-                  {Object.entries(deviceInfo).map(([key, val]) => (
-                    <div
-                      key={key}
-                      className="flex justify-between bg-white/5 p-2.5 border border-white/5 rounded-xl"
-                    >
-                      <span className="text-neutral-400">{key}</span>
-                      <span
-                        className="max-w-[60%] font-medium text-right truncate text-white"
-                        title={String(val)}
-                      >
-                        {val}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h4 className="mb-3 font-mono text-[10px] uppercase tracking-widest text-neutral-400 select-none">
-                  Applications
-                </h4>
-                <div className="gap-3 grid grid-cols-2">
-                  {initialApps.map((app) => {
-                    const win = windows[app.label];
-                    const isOpen = win ? win.isOpen : false;
-                    return (
-                      <div
-                        key={app.label}
-                        className="flex justify-between items-center bg-white/5 p-2.5 border border-white/5 rounded-xl"
-                      >
-                        <div className="flex items-center gap-2.5 min-w-0">
-                          <app.icon className="size-4 text-neutral-400 shrink-0" />
-                          <div className="min-w-0">
-                            <div className="font-medium text-xs text-white truncate">
-                              {app.label}
-                            </div>
-                            <div className="text-[10px] text-neutral-400">
-                              {isOpen ? "Active" : "Idle"}
-                            </div>
-                          </div>
-                        </div>
-                        <button
-                          onClick={() => handleAppClick(app.label)}
-                          className="bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-md font-medium text-xs text-white transition-all cursor-pointer shrink-0"
-                        >
-                          Open
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const renderVSCode = () => {
-    const vscodeFiles = {
-      "page.tsx": `"use client"
-import React, { useState } from 'react';
-import Desktop from './components/Desktop';
-
-export default function Home() {
-  const [isReady, setIsReady] = useState(true);
-  return <Desktop ready={isReady} />;
-}`,
-      "globals.css": `@theme {
-  --color-glass-bg: rgba(255, 255, 255, 0.1);
-  --color-glass-border: rgba(255, 255, 255, 0.2);
-}
-
-.glass {
-  background: var(--color-glass-bg);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--color-glass-border);
-}`,
-      "package.json": `{
-  "name": "glass-os",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build"
-  }
-}`,
-    };
-
-    return (
-      <div className="flex flex-col flex-1 bg-[#1e1e1e]/85 backdrop-blur-md font-mono text-white text-xs">
-        <div className="flex flex-row flex-1 min-h-0">
-          <div className="flex flex-col bg-[#252526]/80 border-[#1e1e1e]/50 border-r w-48 overflow-y-auto shrink-0">
-            <div className="px-3 py-2 font-bold text-[10px] text-white/50 uppercase tracking-wider select-none">
-              Explorer
-            </div>
-            <div className="flex flex-col gap-1 p-2">
-              {Object.keys(vscodeFiles).map((filename) => (
-                <button
-                  key={filename}
-                  onClick={() => setVscodeActiveFile(filename)}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded text-left transition-all cursor-pointer ${vscodeActiveFile === filename ? "bg-[#37373d]/70 text-white" : "text-white/60 hover:bg-[#2a2a2b]/70"}`}
-                >
-                  <Icon
-                    icon="vscode-icons:file-type-typescript-official"
-                    width={14}
-                  />
-                  <span>{filename}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-col flex-1 bg-transparent min-w-0">
-            <div className="flex bg-[#2d2d2d]/60 border-[#1e1e1e]/50 border-b h-9 shrink-0">
-              <div className="flex items-center gap-2 bg-[#1e1e1e]/55 px-4 py-2 border-t border-t-blue-500 text-xs select-none">
-                <Icon
-                  icon="vscode-icons:file-type-typescript-official"
-                  width={14}
-                />
-                <span>{vscodeActiveFile}</span>
-              </div>
-            </div>
-            <textarea
-              readOnly
-              value={
-                vscodeFiles[vscodeActiveFile as keyof typeof vscodeFiles] || ""
-              }
-              className="flex-1 bg-transparent p-4 border-none outline-none overflow-auto font-mono text-blue-300 leading-relaxed whitespace-pre resize-none"
-            />
-          </div>
-        </div>
-        <div className="flex flex-col bg-[#1e1e1e]/90 border-[#2d2d2d]/50 border-t h-32 shrink-0">
-          <div className="flex items-center gap-2 bg-[#252526]/60 px-4 py-1.5 font-bold text-[10px] text-white/50 uppercase select-none">
-            <Icon icon="mdi:terminal" width={12} />
-            <span>Terminal</span>
-          </div>
-          <div className="flex-1 p-3 overflow-y-auto text-green-400 leading-relaxed">
-            <div>$ npm run dev</div>
-            <div className="text-white/70">
-              ready - started server on 0.0.0.0:3000, url: http://localhost:3000
-            </div>
-            <div className="text-white/70">
-              event - compiled client and server successfully in 321ms (18
-              modules)
-            </div>
-            <div className="text-green-500">compiled successfully!</div>
-            <div className="inline-block bg-white ml-1 w-1.5 h-3.5 align-middle animate-pulse"></div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  const renderCamera = () => {
-
-    return (
-      <div className="flex flex-col flex-1 gap-4 bg-amber-50/5 backdrop-blur-md p-4 overflow-hidden text-stone-100">
-        <select
-          className="bg-black/40 p-2 rounded"
-          value={cameraId}
-          onChange={(e) => setCameraId(e.target.value)}
-        >
-          {devices.map((d, i) => (
-            <option key={d.deviceId} value={d.deviceId}>
-              {d.label || `Camera ${i + 1}`}
-            </option>
-          ))}
-        </select>
-
-        <div className="flex flex-1 justify-center items-center rounded-xl overflow-hidden">
-          {photo ? (
-            <img
-              src={photo}
-              alt="Captured"
-              className="rounded-xl w-full h-full object-contain"
-            />
-          ) : (
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="rounded-xl w-full h-full object-cover aspect-video"
-            />
-          )}
-        </div>
-
-        <canvas ref={canvasRef} className="hidden" />
-
-        <div className="flex justify-center gap-3">
-          {!photo ? (
-            <button
-              onClick={capture}
-              className="bg-white p-4 rounded-full text-black"
-            >
-              <FaCamera />
-            </button>
-          ) : (
-            <>
-              <button
-                onClick={retake}
-                className="bg-yellow-500 p-4 rounded-full"
-              >
-                <FaRedo />
-              </button>
-
-              <button
-                onClick={download}
-                className="bg-green-600 p-4 rounded-full"
-              >
-                <FaDownload />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    )
-  }
-
-  const renderNotepad = () => {
-    return (
-      <div className="flex flex-col flex-1 bg-zinc-950/60 backdrop-blur-xl p-4 text-neutral-200">
-        <div className="flex items-center gap-2 mb-2 pb-2 border-b border-white/[0.06] select-none">
-          <button
-            onClick={() => {
-              alert("New file created!");
-              setNotepadText("");
-            }}
-            className="hover:bg-white/[0.08] px-2.5 py-1 rounded-md text-neutral-300 hover:text-white text-xs transition-all cursor-pointer font-medium"
-          >
-            New
-          </button>
-          <button
-            onClick={() => {
-              alert("Text saved to local device (simulated)");
-            }}
-            className="hover:bg-white/[0.08] px-2.5 py-1 rounded-md text-neutral-300 hover:text-white text-xs transition-all cursor-pointer font-medium"
-          >
-            Save
-          </button>
-        </div>
-        <textarea
-          value={notepadText}
-          onChange={(e) => setNotepadText(e.target.value)}
-          className="flex-1 bg-transparent p-2 border-none outline-none font-sans text-neutral-100 placeholder:text-neutral-600 text-xs leading-relaxed resize-none font-mono"
-          placeholder="Start typing..."
-        />
-      </div>
-    );
-  };
-
-  const renderToDo = () => {
-    const activeCount = todos.filter((t) => !t.completed).length;
-    const progress = todos.length
-      ? Math.round(
-        (todos.filter((t) => t.completed).length / todos.length) * 100,
-      )
-      : 0;
-
-    const handleAddTodo = (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!todoInput.trim()) return;
-      setTodos([
-        ...todos,
-        { id: generateId(), text: todoInput.trim(), completed: false },
-      ]);
-      setTodoInput("");
-    };
-
-    const toggleTodo = (id: string) => {
-      setTodos(
-        todos.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t)),
-      );
-    };
-
-    const deleteTodo = (id: string) => {
-      setTodos(todos.filter((t) => t.id !== id));
-    };
-
-    return (
-      <div className="flex flex-col flex-1 bg-zinc-950/60 backdrop-blur-xl p-5 overflow-y-auto text-neutral-200">
-        <div className="flex justify-between items-center mb-3 select-none shrink-0">
-          <div>
-            <h3 className="font-medium text-white text-sm tracking-tight">Tasks</h3>
-            <p className="text-neutral-400 text-xs">
-              {activeCount} tasks remaining
-            </p>
-          </div>
-          <div className="font-mono text-neutral-300 text-xs">
-            {progress}% Done
-          </div>
-        </div>
-
-        <div className="bg-white/10 mb-5 rounded-full w-full h-1 overflow-hidden shrink-0">
-          <div
-            className="bg-white h-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
-
-        <form onSubmit={handleAddTodo} className="flex gap-2 mb-5 shrink-0">
-          <input
-            type="text"
-            value={todoInput}
-            onChange={(e) => setTodoInput(e.target.value)}
-            className="flex-1 bg-white/[0.04] focus:bg-white/[0.08] px-3 py-1.5 border border-white/10 focus:border-white/20 rounded-lg outline-none text-xs placeholder:text-neutral-500 transition-colors"
-            placeholder="Add a new task..."
-          />
-          <button
-            type="submit"
-            className="flex items-center gap-1 bg-white hover:bg-neutral-200 px-3 py-1.5 rounded-lg font-medium text-zinc-950 text-xs transition-colors cursor-pointer"
-          >
-            <Icon icon="mdi:plus" width={14} />
-            <span>Add</span>
-          </button>
-        </form>
-
-        <div className="flex-1 space-y-2 min-h-0 overflow-y-auto">
-          {todos.map((todo) => (
-            <div
-              key={todo.id}
-              className="flex justify-between items-center bg-white/[0.03] hover:bg-white/[0.06] px-3 py-2.5 border border-white/[0.06] rounded-lg transition-colors"
-            >
-              <div
-                className="flex items-center gap-2.5 cursor-pointer"
-                onClick={() => toggleTodo(todo.id)}
-              >
-                <Icon
-                  icon={
-                    todo.completed
-                      ? "mdi:checkbox-marked-circle"
-                      : "mdi:checkbox-blank-circle-outline"
-                  }
-                  className={
-                    todo.completed ? "text-emerald-400" : "text-neutral-500"
-                  }
-                  width={16}
-                />
-                <span
-                  className={`text-xs ${todo.completed ? "line-through text-neutral-500" : "text-neutral-200"}`}
-                >
-                  {todo.text}
-                </span>
-              </div>
-              <button
-                onClick={() => deleteTodo(todo.id)}
-                className="p-1 rounded text-neutral-500 hover:text-rose-400 transition-colors cursor-pointer"
-              >
-                <Icon icon="mdi:delete" width={14} />
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  };
-
-  const renderCalculator = () => {
-    return <CalculatorApp />;
-  }
-
-  const renderCalendar = () => {
-    return <CalendarApp />;
-  }
-
   const renderAppContent = (label: string) => {
     switch (label) {
       case "Google Chrome":
-        return renderChrome();
+        return (
+          <ChromeApp
+            tabs={tabs}
+            activeTabId={activeTabId}
+            activeTab={activeTab}
+            addressBarInput={addressBarInput}
+            setAddressBarInput={setAddressBarInput}
+            draggedWindow={draggedWindow}
+            resizedWindow={resizedWindow}
+            handleBack={handleBack}
+            handleForward={handleForward}
+            handleRefresh={handleRefresh}
+            handleNavigate={handleNavigate}
+          />
+        );
       case "Settings":
-        return renderSettings();
+        return (
+          <SettingsApp
+            settingsTab={settingsTab}
+            setSettingsTab={setSettingsTab}
+            wallpaper={wallpaper}
+            setWallpaper={setWallpaper}
+            cpuUsage={cpuUsage}
+            memUsage={memUsage}
+            settingsWifi={settingsWifi}
+            setSettingsWifi={setSettingsWifi}
+            settingsBluetooth={settingsBluetooth}
+            setSettingsBluetooth={setSettingsBluetooth}
+            deviceInfo={deviceInfo}
+            initialApps={initialApps}
+            windows={windows}
+            handleAppClick={handleAppClick}
+          />
+        );
       case "Camera":
-        return renderCamera();
+        return (
+          <CameraApp
+            cameraId={cameraId}
+            setCameraId={setCameraId}
+            devices={devices}
+            photo={photo}
+            videoRef={videoRef}
+            canvasRef={canvasRef}
+            capture={capture}
+            retake={retake}
+            download={download}
+          />
+        );
       case "Visual Studio Code":
-        return renderVSCode();
+        return (
+          <VSCodeApp
+            vscodeActiveFile={vscodeActiveFile}
+            setVscodeActiveFile={setVscodeActiveFile}
+          />
+        );
       case "Notepad":
-        return renderNotepad();
+        return (
+          <NotepadApp
+            notepadText={notepadText}
+            setNotepadText={setNotepadText}
+          />
+        );
       case "Calculator":
-        return renderCalculator();
+        return <CalculatorApp />;
       case "Calendar":
-        return renderCalendar();
+        return <CalendarApp />;
       case "To-Do":
-        return renderToDo();
+        return (
+          <TodoApp
+            todos={todos}
+            setTodos={setTodos}
+            todoInput={todoInput}
+            setTodoInput={setTodoInput}
+            generateId={generateId}
+          />
+        );
       case "Games":
         return <Games />;
       case "Weather":
@@ -1749,41 +945,16 @@ export default function Home() {
   };
 
   const chromeHeader = (
-    <div className="flex flex-1 items-end gap-1 mt-1 overflow-x-auto no-scrollbar nodrag">
-      {tabs.map((tab, index) => {
-        const isActive = tab.id === activeTabId;
-        return (
-          <div
-            key={tab.id}
-            draggable
-            onDragStart={(e) => handleTabDragStart(e, index)}
-            onDrop={(e) => handleTabDrop(e, index)}
-            onDragOver={handleTabDragOver}
-            onClick={() => switchTab(tab)}
-            className={`group flex items-center gap-2 max-w-50 min-w-30 px-4 py-2 rounded-t-xl text-sm cursor-pointer transition-colors ${isActive
-              ? "bg-[#2b2c2f] text-gray-100"
-              : "bg-transparent text-gray-400 hover:bg-white/5"
-              }`}
-          >
-            <Icon icon="mdi:web" className="shrink-0" width={16} />
-            <span className="flex-1 font-medium truncate">{tab.title}</span>
-            <Icon
-              icon="mdi:close"
-              width={14}
-              onClick={(e: React.MouseEvent) => closeTab(e, tab.id)}
-              className={`shrink-0 rounded-full hover:bg-white/20 p-px transition-opacity ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"
-                }`}
-            />
-          </div>
-        );
-      })}
-      <button
-        onClick={addNewTab}
-        className="hover:bg-white/10 mb-1.5 ml-1 p-1 rounded-full text-gray-400 transition-colors cursor-pointer"
-      >
-        <Icon icon="mdi:plus" width={18} />
-      </button>
-    </div>
+    <ChromeHeader
+      tabs={tabs}
+      activeTabId={activeTabId}
+      switchTab={switchTab}
+      closeTab={closeTab}
+      addNewTab={addNewTab}
+      handleTabDragStart={handleTabDragStart}
+      handleTabDrop={handleTabDrop}
+      handleTabDragOver={handleTabDragOver}
+    />
   );
 
   return (
@@ -1801,7 +972,7 @@ export default function Home() {
 
       {currentScreen !== "LOGIN" ? (
         <>
-          <div className="top-0 z-50 absolute flex flex-row justify-between items-center bg-zinc-950/80 backdrop-blur-xl px-4 border-b border-white/[0.08] w-full h-11">
+          <div className="top-0 z-50 absolute flex flex-row justify-between items-center bg-zinc-950/80 backdrop-blur-xl px-4 border-white/8 border-b w-full h-11">
             <div className="flex flex-col justify-center items-start text-white text-start leading-none select-none">
               <DateTime />
             </div>
@@ -1919,32 +1090,7 @@ export default function Home() {
           })}
         </>
       ) : (
-        <div className="z-10 relative flex flex-col justify-center items-center size-full select-none">
-          <div className="flex flex-col items-center bg-zinc-950/60 backdrop-blur-2xl p-8 border border-white/[0.08] rounded-2xl w-80 shadow-2xl text-center">
-            <div className="flex justify-center items-center bg-white/[0.06] mb-4 border border-white/10 rounded-full w-16 h-16 text-neutral-300">
-              <FaUserAstronaut className="size-8 text-neutral-200" />
-            </div>
-            <h1 className="font-medium text-white text-base tracking-tight">GlassOS</h1>
-            <p className="mt-0.5 text-neutral-400 text-xs">Enter PIN to unlock</p>
-
-            <div className="mt-6 w-full space-y-2">
-              <input
-                type="password"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={4}
-                value={pin}
-                onChange={handleChange}
-                placeholder="••••"
-                name="password"
-                className="bg-white/[0.04] focus:bg-white/[0.08] px-4 py-2.5 border border-white/10 focus:border-white/20 rounded-lg outline-none w-full font-mono text-center text-white text-lg tracking-[0.5em] placeholder:text-neutral-600 transition-all"
-              />
-              <p className="text-[10px] text-neutral-500 font-mono">
-                PIN: 1234
-              </p>
-            </div>
-          </div>
-        </div>
+        <LoginScreen pin={pin} onChange={handleChange} />
       )}
     </div>
   );

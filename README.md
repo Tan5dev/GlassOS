@@ -35,3 +35,24 @@ A browser based virtual Operating System based on clean glassmorphism UI, simple
 - Added calculator app
 - Added calendar app
 - Added hackatime widget
+
+## Updates in v3
+
+- Made VSCode interface almost real
+- Mock terminal inside VSCode
+- Added a startup animation
+
+## Terminal Commands
+
+```bash
+run [file] Execute file JS/TS code
+node Execute specified JS file
+ls, pwd, cd [dir] Navigate directory structure
+cat, touch, rm File inspection and edits
+cp, mv Copy or rename files
+echo [> file] Print text or write to file
+grep, find, wc Search and inspect content
+head, tail View line subsets
+date, env, history System tools
+clear, reset Manage terminal state
+```

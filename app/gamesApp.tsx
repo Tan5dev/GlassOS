@@ -293,7 +293,7 @@ export function Games() {
 
     return (
         <div className="flex flex-col flex-1 bg-zinc-950/60 backdrop-blur-xl h-full overflow-y-hidden text-white select-none">
-            <div className="flex flex-col gap-3 bg-white/[0.02] p-4 border-b border-white/[0.08] shrink-0">
+            <div className="flex flex-col gap-3 bg-white/2 p-4 border-b border-white/8 shrink-0">
                 <div className="flex items-center gap-3">
                     <div className="relative flex-1">
                         <Icon
@@ -306,7 +306,7 @@ export function Games() {
                             placeholder="Search games..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="bg-white/[0.04] focus:bg-white/[0.08] py-2 pr-4 pl-9 border border-white/10 focus:border-white/20 rounded-lg outline-none w-full placeholder:text-neutral-500 text-xs transition-all"
+                            className="bg-white/4 py-2 pr-4 pl-9 border border-white/10 rounded-lg outline-none w-full placeholder:text-neutral-500 text-xs transition-all"
                         />
                         {searchQuery && (
                             <button
@@ -336,7 +336,7 @@ export function Games() {
                                 onClick={() => setActiveTab(tab)}
                                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all cursor-pointer border ${isActive
                                     ? "bg-white text-zinc-950 border-white font-semibold"
-                                    : "bg-white/[0.03] border-white/[0.06] text-neutral-400 hover:text-white hover:bg-white/[0.08]"
+                                    : "bg-white/3 border-white/6 text-neutral-400 hover:text-white hover:bg-white/8"
                                     }`}
                             >
                                 <Icon icon={iconName} width={13} />
@@ -349,14 +349,14 @@ export function Games() {
 
             <div className="flex-1 space-y-5 p-4 overflow-y-auto">
                 {activeTab === "All" && !searchQuery && featuredGame && (
-                    <div className="group relative bg-zinc-900 border border-white/[0.08] rounded-xl min-h-35 max-h-52 aspect-21/9 overflow-hidden">
+                    <div className="group relative bg-zinc-900 border border-white/8 rounded-xl min-h-35 max-h-52 aspect-21/9 overflow-hidden">
                         <div className="absolute inset-0 opacity-30 group-hover:scale-105 transition-transform duration-500">
                             <img
                                 src={featuredGame.image}
                                 alt={featuredGame.name}
                                 className="blur-[1px] w-full h-full object-cover"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/70 to-transparent" />
+                            <div className="absolute inset-0 bg-linear-to-t from-zinc-950 via-zinc-950/70 to-transparent" />
                         </div>
 
                         <div className="z-10 absolute inset-0 flex flex-col justify-end p-5">
@@ -396,7 +396,7 @@ export function Games() {
                                     onClick={() => handlePlayGame(game)}
                                     className="group flex flex-col items-center gap-1.5 text-center transition-all cursor-pointer"
                                 >
-                                    <div className="relative border border-white/[0.08] group-hover:border-white/20 rounded-lg w-full aspect-square overflow-hidden transition-all duration-150">
+                                    <div className="relative border border-white/8 group-hover:border-white/20 rounded-lg w-full aspect-square overflow-hidden transition-all duration-150">
                                         <img
                                             src={game.image}
                                             alt={game.name}
@@ -432,9 +432,9 @@ export function Games() {
                                 return (
                                     <div
                                         key={game.slug}
-                                        className="group relative flex flex-col bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/15 rounded-lg overflow-hidden transition-all duration-150"
+                                        className="group relative flex flex-col bg-white/3 hover:bg-white/6 border border-white/8 hover:border-white/15 rounded-lg overflow-hidden transition-all duration-150"
                                     >
-                                        <div className="relative bg-zinc-900 border-b border-white/[0.06] w-full aspect-4/3 overflow-hidden">
+                                        <div className="relative bg-zinc-900 border-b border-white/6 w-full aspect-4/3 overflow-hidden">
                                             <img
                                                 src={game.image}
                                                 alt={game.name}
@@ -476,7 +476,7 @@ export function Games() {
                                                 {game.name}
                                             </h4>
                                             <div className="flex justify-between items-center mt-2">
-                                                <span className="bg-white/[0.04] px-1.5 py-0.5 rounded text-[9px] font-mono text-neutral-400">
+                                                <span className="bg-white/4 px-1.5 py-0.5 rounded text-[9px] font-mono text-neutral-400">
                                                     {game.category}
                                                 </span>
                                                 <span className="flex items-center gap-0.5 font-medium text-[10px] text-neutral-400 group-hover:text-white">
@@ -492,9 +492,9 @@ export function Games() {
                         <div className="flex flex-col justify-center items-center space-y-2 py-12 text-neutral-500">
                             <Icon icon="mdi:gamepad-circle-down" width={36} className="text-neutral-600" />
                             <div className="text-center">
-                                <p className="font-medium text-xs text-neutral-400">No results</p>
+                                <p className="font-medium text-xs text-neutral-400">No games found</p>
                                 <p className="mt-0.5 text-neutral-500 text-[11px]">
-                                    Try a different search term or category.
+                                    Try a different search query.
                                 </p>
                             </div>
                         </div>
@@ -503,7 +503,7 @@ export function Games() {
                     {visibleCount < filteredGames.length && (
                         <button
                             onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
-                            className="bg-white/[0.04] hover:bg-white/[0.08] mt-4 py-2 border border-white/10 rounded-lg w-full font-medium text-neutral-300 text-xs text-center transition-all cursor-pointer"
+                            className="bg-white/4 hover:bg-white/8 mt-4 py-2 border border-white/10 rounded-lg w-full font-medium text-neutral-300 text-xs text-center transition-all cursor-pointer"
                         >
                             Load More ({filteredGames.length - visibleCount} left)
                         </button>
