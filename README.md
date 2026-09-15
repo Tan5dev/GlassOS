@@ -1,58 +1,90 @@
-# GlassOS
+GlassOS
 
-A browser based virtual Operating System based on clean glassmorphism UI, simple focussed apps, no bloatware and easy to use.
+GlassOS is a browser-based virtual Operating System that I made with a clean glassmorphism design.
 
-## Features
+I wanted to make something that feels like a small desktop environment inside a browser, with useful apps, simple controls, and no unnecessary bloat.
 
-- **Window Management:** Windows can be dragged, resized, minimized, maximized, and focused.
-- **State Persistence:** Persistent windows position, customization
-- **Taskbar:** Built with `@dnd-kit/sortable` for dynamic drag-and-drop rearranging of dock icons.
-- **Hardware APIs:** Hooks into browser APIs to display real-time battery status, charging indicators, network speed estimates, and memory usage.
-- **Hackatime Widget** A real hackatime widget where users can connect their account and see real stats.
+What can GlassOS do?
 
-## Built-in Apps
+Window management
+Save window positions and customizations
+Drag and drop taskbar icons
+Real-time battery and charging information
+Network speed information
+Browser memory usage
+Hackatime widget with real account statistics
+Desktop and wallpaper customization
 
-- **Browser:** Multi-tab functional web browser.
-- **Weather:** A functional weather app
-- **Notepad:** Standard text editor with persistent local storage.
-- **Tasks:** A basic checklist tracker.
-- **Settings:** Controls desktop wallpapers and system preferences.
-- **VS Code:** A mock code editor interface with active file state tracking.
-- **Calculator** A real calculator app with scientific operations
-- **Calendar** A real calendar with persistent events storage
+Built-in Apps
 
-## Stack
+Browser — A multi-tab browser
+Weather — A functional weather app
+Notepad — A simple text editor with local storage
+Tasks — A basic checklist tracker
+Settings — Controls wallpapers and system preferences
+VS Code — A mock code editor with active file tracking
+Calculator — A real calculator with scientific operations
+Calendar — A calendar with persistent events
+Game Library — A place to access games
+Terminal — A terminal interface with different commands
 
-- Next.js
-- Tailwind CSS v4
-- @dnd-kit (Core & Sortable)
-- React Icons / Iconify
+Why I made it
 
-## Updates in v2
+I made GlassOS because I like experimenting with desktop interfaces and wanted to see how much of an operating system-like experience I could build inside a browser.
 
-- Added full screen Prompt
-- Added game library
-- Added calculator app
-- Added calendar app
-- Added hackatime widget
+I also wanted to learn more about Next.js, React, browser APIs, state management, and building interactive interfaces.
 
-## Updates in v3
+What I used
 
-- Made VSCode interface almost real
-- Mock terminal inside VSCode
-- Added a startup animation
+Next.js
+React
+Tailwind CSS v4
+@dnd-kit
+React Icons
+Iconify
 
-## Terminal Commands
+Updates in v2
 
-```bash
-run [file] Execute file JS/TS code
-node Execute specified JS file
-ls, pwd, cd [dir] Navigate directory structure
-cat, touch, rm File inspection and edits
-cp, mv Copy or rename files
-echo [> file] Print text or write to file
-grep, find, wc Search and inspect content
-head, tail View line subsets
-date, env, history System tools
-clear, reset Manage terminal state
-```
+Added full-screen Prompt
+Added game library
+Added calculator app
+Added calendar app
+Added Hackatime widget
+
+Updates in v3
+
+Improved the VS Code interface
+Added a mock terminal inside VS Code
+Added a startup animation
+
+Terminal Commands
+
+run [file] — Execute JavaScript/TypeScript code
+node — Execute a JavaScript file
+ls — List files
+pwd — Show current directory
+cd [dir] — Navigate directories
+cat — View file contents
+touch — Create a file
+rm — Remove a file
+cp — Copy a file
+mv — Rename or move files
+echo — Print or write text
+grep — Search content
+find — Find files
+wc — Count content
+head — View the beginning of a file
+tail — View the end of a file
+date — Show the date and time
+env — Show environment information
+history — View command history
+clear — Clear the terminal
+reset — Reset the terminal
+
+Try GlassOS
+
+You can try it here:
+
+https://glassos.vercel.app/
+
+I hope you enjoy using it! 🪟✨
